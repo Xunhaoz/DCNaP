@@ -1,40 +1,37 @@
 # -*- coding: utf-8 -*-
-import secrets
-import string
+from blueprint.authentication.route import authentication
+from models.database import db
 
-from blueprints.login.routes import *
-from blueprints.register.routes import *
-from blueprints.forget_password.routes import *
-from blueprints.index.routes import *
+from flask import Flask, render_template
 
-from package.response import Response
-
-from flask import Flask
-
-app = Flask(__name__)
-app.secret_key = ''.join(secrets.choice(string.ascii_letters) for i in range(10))
-
-# blueprint
-app.register_blueprint(login_blueprints, url_prefix='/login')
-app.register_blueprint(forget_password_blueprints, url_prefix='/forget_password')
-app.register_blueprint(register_blueprints, url_prefix='/register')
-app.register_blueprint(index_blueprints, url_prefix='/index')
+app = Flask(__name__, template_folder="templates", static_folder="static")
 
 # SQLALCHEMY
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///DepartmentComputerNetworkProgramming.db"
+app.register_blueprint(authentication)
 db.init_app(app)
+
 with app.app_context():
+    db.session.close()
+    db.drop_all()
     db.create_all()
 
 
-@app.errorhandler(Exception)
-def handle_exception(e: Exception):
-    return Response.sever_error("sever error", str(e))
+@app.errorhandler(404)
+def page_not_found(e):
+    print(e)
+    return render_template("error-404.html"), 404
 
 
-@app.route("/", methods=['GET'])
-def test_connection():
-    return Response.response('connect success')
+@app.errorhandler(500)
+def page_not_found(e):
+    print(e)
+    return render_template("error-500.html"), 500
+
+
+# @app.errorhandler(Exception)
+# def handle_exception(e: Exception):
+#     return Response.sever_error("sever error", str(e))
 
 
 if __name__ == '__main__':
