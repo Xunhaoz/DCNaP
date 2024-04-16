@@ -3,26 +3,35 @@ import json
 
 
 
-def getList():
+def getFunding():
     # https://www.binance.com/fapi/v1/premiumIndex?symbol=BTCUSDT
     url = "https://www.binance.com/fapi/v1/premiumIndex"
 
-    symbols = getSymbol()
+    # symbols = getSymbol()
+    #
+    # result = {}
+    # for symbol in symbols:
+    #
+    #     try:
+    #         response = requests.get(url+ "?symbol=" + symbol)
+    #         # print(json.dumps(json.loads(response.text), indent=4))
+    #
+    #         fundingRate = json.loads(response.text)["lastFundingRate"]
+    #         result[symbol] = fundingRate
+    #     except Exception:
+    #         pass
+    #
+    # print(result)
 
-    result = {}
-    for symbol in symbols:
+    response = requests.get(url)
 
-        try:
-            response = requests.get(url+ "?symbol=" + symbol)
-            # print(json.dumps(json.loads(response.text), indent=4))
+    parsed_response = json.loads(response.text)
 
-            fundingRate = json.loads(response.text)["lastFundingRate"]
-            result[symbol] = fundingRate
-        except Exception:
-            pass
+    result = {pair["symbol"]:eval(pair["lastFundingRate"])*100 for pair in parsed_response}
+    sorted_result = dict(sorted(result.items(), key=lambda item: item[1], reverse=True))
+    print(sorted_result)
 
-    print(result)
-    return result
+    return sorted_result
 
 def getSymbol():
     # https://www.binance.com/bapi/futures/v1/public/future/common/symbol-config-info
@@ -43,6 +52,6 @@ def getSymbol():
 
 
 if __name__ == "__main__":
-    getList()
+    getFunding()
 
 
