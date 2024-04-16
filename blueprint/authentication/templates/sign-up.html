@@ -8,77 +8,261 @@
 * Licensed under MIT (https://github.com/tabler/tabler/blob/master/LICENSE)
 -->
 <html lang="en">
-  <head>
+<head>
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
     <meta http-equiv="X-UA-Compatible" content="ie=edge"/>
-    <title>Sign up - Tabler - Premium and Open Source dashboard template with responsive and high quality UI.</title>
+    <title>Sign up</title>
     <!-- CSS files -->
-    <link href="./dist/css/tabler.min.css?1692870487" rel="stylesheet"/>
-    <link href="./dist/css/tabler-flags.min.css?1692870487" rel="stylesheet"/>
-    <link href="./dist/css/tabler-payments.min.css?1692870487" rel="stylesheet"/>
-    <link href="./dist/css/tabler-vendors.min.css?1692870487" rel="stylesheet"/>
-    <link href="./dist/css/demo.min.css?1692870487" rel="stylesheet"/>
+    <link href="{{ url_for('static', filename='css/tabler.min.css') }}" rel="stylesheet"/>
+    <link href="{{ url_for('static', filename='css/tabler-flags.min.css') }}" rel="stylesheet"/>
+    <link href="{{ url_for('static', filename='css/tabler-payments.min.css') }}" rel="stylesheet"/>
+    <link href="{{ url_for('static', filename='css/tabler-vendors.min.css') }}" rel="stylesheet"/>
+    <link href="{{ url_for('static', filename='css/demo.min.css') }}" rel="stylesheet"/>
     <style>
-      @import url('https://rsms.me/inter/inter.css');
-      :root {
-      	--tblr-font-sans-serif: 'Inter Var', -apple-system, BlinkMacSystemFont, San Francisco, Segoe UI, Roboto, Helvetica Neue, sans-serif;
-      }
-      body {
-      	font-feature-settings: "cv03", "cv04", "cv11";
-      }
+        @import url('https://rsms.me/inter/inter.css');
+
+        :root {
+            --tblr-font-sans-serif: 'Inter Var', -apple-system, BlinkMacSystemFont, San Francisco, Segoe UI, Roboto, Helvetica Neue, sans-serif;
+        }
+
+        body {
+            font-feature-settings: "cv03", "cv04", "cv11";
+        }
+
+        .alert-fixed {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes fadeOut {
+            from {
+                opacity: 1;
+            }
+            to {
+                opacity: 0;
+            }
+        }
     </style>
-  </head>
-  <body  class=" d-flex flex-column">
-    <script src="./dist/js/demo-theme.min.js?1692870487"></script>
-    <div class="page page-center">
-      <div class="container container-tight py-4">
-        <div class="text-center mb-4">
-          <a href="." class="navbar-brand navbar-brand-autodark">
-            <img src="./static/logo.svg" width="110" height="32" alt="Tabler" class="navbar-brand-image">
-          </a>
-        </div>
-        <form class="card card-md" action="./" method="get" autocomplete="off" novalidate>
-          <div class="card-body">
-            <h2 class="card-title text-center mb-4">Create new account</h2>
-            <div class="mb-3">
-              <label class="form-label">Name</label>
-              <input type="text" class="form-control" placeholder="Enter name">
-            </div>
-            <div class="mb-3">
-              <label class="form-label">Email address</label>
-              <input type="email" class="form-control" placeholder="Enter email">
-            </div>
-            <div class="mb-3">
-              <label class="form-label">Password</label>
-              <div class="input-group input-group-flat">
-                <input type="password" class="form-control"  placeholder="Password"  autocomplete="off">
-                <span class="input-group-text">
-                  <a href="#" class="link-secondary" title="Show password" data-bs-toggle="tooltip"><!-- Download SVG icon from http://tabler-icons.io/i/eye -->
-                    <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" /><path d="M21 12c-2.4 4 -5.4 6 -9 6c-3.6 0 -6.6 -2 -9 -6c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6" /></svg>
+</head>
+<body class=" d-flex flex-column">
+<script src="{{ url_for('static', filename='js/demo-theme.min.js') }}"></script>
+<div class="page page-center">
+    <div class="container container-tight py-4">
+        <form id="registerForm" class="card card-md" action="./" method="get" autocomplete="off" novalidate>
+            <div class="card-body">
+                <h2 class="card-title text-center mb-4">Create new account</h2>
+                <div class="mb-3">
+                    <label class="form-label">Name</label>
+                    <input id="name" type="text" class="form-control" placeholder="Enter name">
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Email address</label>
+                    <input id="email" type="email" class="form-control" placeholder="Enter email">
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Password</label>
+                    <div class="input-group input-group-flat">
+                        <input id="password" type="password" class="form-control" placeholder="Password"
+                               autocomplete="off">
+                        <span class="input-group-text">
+                  <a href="#" class="link-secondary" title="Show password" data-bs-toggle="tooltip"
+                     onclick="togglePasswordVisibility()"><!-- Download SVG icon from http://tabler-icons.io/i/eye -->
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24"
+                         stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round"
+                         stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path
+                            d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0"/><path
+                            d="M21 12c-2.4 4 -5.4 6 -9 6c-3.6 0 -6.6 -2 -9 -6c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6"/></svg>
                   </a>
                 </span>
-              </div>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label class="form-check">
+                        <input id="agreeCheckbox" type="checkbox" class="form-check-input"/>
+                        <span class="form-check-label">Agree the <a
+                                href="{{ url_for('authentication.terms_of_service') }}"
+                                tabindex="-1" target="_blank">terms and policy</a>.</span>
+                    </label>
+                </div>
+                <div class="form-footer">
+                    <button type="submit" class="btn btn-primary w-100">Create new account</button>
+                </div>
             </div>
-            <div class="mb-3">
-              <label class="form-check">
-                <input type="checkbox" class="form-check-input"/>
-                <span class="form-check-label">Agree the <a href="./terms-of-service.html" tabindex="-1">terms and policy</a>.</span>
-              </label>
-            </div>
-            <div class="form-footer">
-              <button type="submit" class="btn btn-primary w-100">Create new account</button>
-            </div>
-          </div>
         </form>
         <div class="text-center text-secondary mt-3">
-          Already have account? <a href="./sign-in.html" tabindex="-1">Sign in</a>
+            Already have account? <a href="{{ url_for('authentication.sign_in') }}" tabindex="-1">Sign in</a>
         </div>
-      </div>
     </div>
-    <!-- Libs JS -->
-    <!-- Tabler Core -->
-    <script src="./dist/js/tabler.min.js?1692870487" defer></script>
-    <script src="./dist/js/demo.min.js?1692870487" defer></script>
-  </body>
+</div>
+
+
+<div id="successAlert" class="alert alert-success alert-fixed" role="alert" style="display: none;">
+    <div class="d-flex">
+        <div>
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon alert-icon" width="24" height="24" viewBox="0 0 24 24"
+                 stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                <path d="M5 12l5 5l10 -10"></path>
+            </svg>
+        </div>
+        <div id="successAlertMsg">
+            Wow! Everything worked!
+        </div>
+    </div>
+</div>
+
+
+<div id="warningAlert" class="alert alert-warning alert-fixed" role="alert" style="display: none;">
+    <div class="d-flex">
+        <div>
+            <!-- Download SVG icon from http://tabler-icons.io/i/alert-triangle -->
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon alert-icon" width="24" height="24" viewBox="0 0 24 24"
+                 stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                <path d="M12 9v4"></path>
+                <path d="M10.363 3.591l-8.106 13.534a1.914 1.914 0 0 0 1.636 2.871h16.214a1.914 1.914 0 0 0 1.636 -2.87l-8.106 -13.536a1.914 1.914 0 0 0 -3.274 0z"></path>
+                <path d="M12 16h.01"></path>
+            </svg>
+        </div>
+        <div id="warningAlertMsg">
+            Uh oh, something went wrong
+        </div>
+    </div>
+</div>
+
+<div id="dangerAlert" class="alert alert-danger alert-fixed" role="alert" style="display: none;">
+    <div class="d-flex">
+        <div>
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon alert-icon" width="24" height="24" viewBox="0 0 24 24"
+                 stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                <path d="M3 12a9 9 0 1 0 18 0a9 9 0 0 0 -18 0"></path>
+                <path d="M12 8v4"></path>
+                <path d="M12 16h.01"></path>
+            </svg>
+        </div>
+        <div id="dangerAlertMsg">
+            I'm so sorry…
+        </div>
+    </div>
+</div>
+
+<div id="infoAlert" class="alert alert-info alert-fixed" role="alert" style="display: none;">
+    <div class="d-flex">
+        <div>
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon alert-icon" width="24" height="24" viewBox="0 0 24 24"
+                 stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                <path d="M3 12a9 9 0 1 0 18 0a9 9 0 0 0 -18 0"></path>
+                <path d="M12 9h.01"></path>
+                <path d="M11 12h1v4h1"></path>
+            </svg>
+        </div>
+        <div id="infoMsg">
+            Did you know?
+        </div>
+    </div>
+</div>
+
+<!-- Libs JS -->
+<!-- Tabler Core -->
+<script src="{{ url_for('static', filename='js/tabler.min.js') }}" defer></script>
+<script src="{{ url_for('static', filename='js/demo.min.js') }}" defer></script>
+
+<script>
+    function togglePasswordVisibility() {
+        var passwordInput = document.getElementById('password');
+        if (passwordInput.type === 'password') {
+            passwordInput.type = 'text';
+        } else {
+            passwordInput.type = 'password';
+        }
+        return false;
+    }
+
+    function validateEmail(email) {
+        var emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return emailPattern.test(email);
+    }
+
+
+    document.getElementById("registerForm").addEventListener("submit", function (event) {
+        event.preventDefault();
+
+        var name = document.getElementById("name").value;
+        var email = document.getElementById("email").value;
+        var password = document.getElementById("password").value;
+        var agreeCheckbox = document.getElementById("agreeCheckbox").checked;
+
+        if (name.trim() === "" || email.trim() === "" || password.trim() === "" || !agreeCheckbox) {
+            showMessage("warningAlert", "warningAlertMsg", "Please fill all fields and agree to the terms and policy.");
+            return;
+        }
+
+        if (!validateEmail(email)) {
+            showMessage("warningAlert", "warningAlertMsg", "Please enter a valid email address.");
+            return;
+        }
+
+        var formData = new FormData();
+        formData.append("name", name);
+        formData.append("email", email);
+        formData.append("password", password);
+
+        fetch("{{ url_for('authentication.create_user') }}", {
+            method: "POST",
+            body: formData
+        })
+            .then(response => {
+                if (!response.ok) {
+                    return response.json().then(data => {
+                        throw new Error(data.message);
+                    });
+                }
+                return response.json();
+            })
+            .then(data => {
+                document.getElementById("name").value = "";
+                document.getElementById("email").value = "";
+                document.getElementById("password").value = "";
+                document.getElementById("agreeCheckbox").checked = false;
+
+                showMessage("successAlert", "successAlertMsg", data.message);
+            })
+            .catch(error => {
+                showMessage("dangerAlert", "dangerAlertMsg", String(error.message));
+            });
+    });
+
+    function showMessage(elementId, messageId, message) {
+        let element = document.getElementById(elementId);
+        let messageElement = document.getElementById(messageId);
+        messageElement.innerText = message;
+
+        element.style.display = "block";
+        element.style.animation = "fadeIn 1s ease-in-out forwards";
+
+        setTimeout(function () {
+            element.style.animation = "fadeOut 1s ease-in-out forwards";
+            setTimeout(function () {
+                element.style.display = "none";
+            }, 1000);
+        }, 3000);
+    }
+
+</script>
+
+</body>
 </html>
