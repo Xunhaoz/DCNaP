@@ -1,8 +1,8 @@
-import requests
-import json
+from models.database import User, db
 
-import exchange.binance
-import exchange.coinbase
+
+import blueprint.market.exchange.binance
+import blueprint.market.exchange.coinbase
 
 
 
@@ -18,6 +18,10 @@ def main():
 
     print(result)
     return result
+
+def getExchanges():
+    
+    return 
 
 
 
