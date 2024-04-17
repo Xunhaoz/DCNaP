@@ -10,4 +10,7 @@ class User(db.Model):
     password = db.Column(db.String(80))
 
     def __repr__(self):
-        return '<User %r>' % self.username
+        return '<User %r>' % self.name
+
+    def as_dict(self):
+        return {c.name: str(getattr(self, c.name)) for c in self.__table__.columns}
