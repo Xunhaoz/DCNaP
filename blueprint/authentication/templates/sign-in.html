@@ -38,10 +38,10 @@
         <div class="card card-md">
             <div class="card-body">
                 <h2 class="h2 text-center mb-4">Login to your account</h2>
-                <form action="./" method="get" autocomplete="off" novalidate>
+                <form id="loginForm" action="./" method="get" autocomplete="off" novalidate>
                     <div class="mb-3">
                         <label class="form-label">Email address</label>
-                        <input type="email" class="form-control" placeholder="your@email.com" autocomplete="off">
+                        <input id="email" type="email" class="form-control" placeholder="your@email.com" autocomplete="off">
                     </div>
                     <div class="mb-2">
                         <label class="form-label">
@@ -51,9 +51,10 @@
                   </span>
                         </label>
                         <div class="input-group input-group-flat">
-                            <input type="password" class="form-control" placeholder="Your password" autocomplete="off">
+                            <input id="password" type="password" class="form-control" placeholder="Your password" autocomplete="off">
                             <span class="input-group-text">
-                    <a href="#" class="link-secondary" title="Show password" data-bs-toggle="tooltip"><!-- Download SVG icon from http://tabler-icons.io/i/eye -->
+                    <a href="#" class="link-secondary" title="Show password" data-bs-toggle="tooltip"
+                       onclick="togglePasswordVisibility()">
                       <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24"
                            stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round"
                            stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path
@@ -63,12 +64,7 @@
                   </span>
                         </div>
                     </div>
-                    <div class="mb-2">
-                        <label class="form-check">
-                            <input type="checkbox" class="form-check-input"/>
-                            <span class="form-check-label">Remember me on this device</span>
-                        </label>
-                    </div>
+
                     <div class="form-footer">
                         <button type="submit" class="btn btn-primary w-100">Sign in</button>
                     </div>
@@ -80,9 +76,64 @@
         </div>
     </div>
 </div>
+
+{% include 'alert.html' %}
+
 <!-- Libs JS -->
 <!-- Tabler Core -->
 <script src="{{ url_for('static', filename='js/tabler.min.js') }}" defer></script>
 <script src="{{ url_for('static', filename='js/demo.min.js') }}" defer></script>
+
+<script>
+    function togglePasswordVisibility() {
+        var passwordInput = document.getElementById('password');
+        if (passwordInput.type === 'password') {
+            passwordInput.type = 'text';
+        } else {
+            passwordInput.type = 'password';
+        }
+        return false;
+    }
+
+
+    document.getElementById("loginForm").addEventListener("submit", function (event) {
+        event.preventDefault();
+
+        var email = document.getElementById("email").value;
+        var password = document.getElementById("password").value;
+
+        if (email.trim() === "" || password.trim() === "") {
+            showMessage("warningAlert", "warningAlertMsg", "Please fill all fields.");
+            return;
+        }
+
+        var formData = new FormData();
+        formData.append("email", email);
+        formData.append("password", password);
+
+        fetch("{{ url_for('authentication.sign_in_user') }}", {
+            method: "POST",
+            body: formData
+        })
+            .then(response => {
+                if (!response.ok) {
+                    return response.json().then(data => {
+                        throw new Error(data.message);
+                    });
+                }
+                return response.json();
+            })
+            .then(data => {
+                document.getElementById("email").value = "";
+                document.getElementById("password").value = "";
+                showMessage("successAlert", "successAlertMsg", data.message);
+            })
+            .catch(error => {
+                showMessage("dangerAlert", "dangerAlertMsg", String(error.message));
+            });
+    });
+</script>
+
+
 </body>
 </html>

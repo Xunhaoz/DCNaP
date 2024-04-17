@@ -1,6 +1,11 @@
-from models.database import User, db
-from flask import Blueprint, render_template, request
 import hashlib
+from models.database import User, db
+from models.email import mail
+from flask_mail import Message
+from flask import Blueprint, render_template, request, make_response, jsonify
+from flask_jwt_extended import create_access_token, get_jwt_identity, jwt_required, create_refresh_token, \
+    set_access_cookies, set_refresh_cookies, unset_access_cookies, unset_refresh_cookies
+from config import Config
 
 authentication = Blueprint(
     "authentication",
@@ -45,3 +50,48 @@ def create_user():
 
     except Exception as e:
         return {"message": "Some error happened"}, 500
+
+
+@authentication.route("/sign-in", methods=["POST"])
+def sign_in_user():
+    password = hashlib.md5(request.form["password"].encode()).hexdigest()
+    user = User.query.filter_by(email=request.form["email"], password=password).first()
+    if user is None:
+        return {"message": "Invalid credentials"}, 400
+
+    access_token = create_access_token(identity=user.as_dict())
+    refresh_token = create_refresh_token(identity=user.as_dict())
+    response = make_response(jsonify({"message": "User logged in successfully"}), 200)
+    set_access_cookies(response, access_token)
+    set_refresh_cookies(response, refresh_token)
+    return response
+
+
+@authentication.route("/sign-out", methods=["POST"])
+@jwt_required()
+def sign_out_user():
+    response = make_response(jsonify({"message": "User logged out successfully"}), 200)
+    unset_access_cookies(response)
+    unset_refresh_cookies(response)
+    return response
+
+
+@authentication.route("/forgot-password", methods=["POST"])
+def send_password_user():
+    user = User.query.filter_by(email=request.form["email"]).first()
+    if user is None:
+        return {"message": "User not found"}, 400
+
+    try:
+        mail_message = Message(
+            'Password reset request',
+            sender='leo20020529@gmail.com',
+            recipients=[request.form["email"]]
+        )
+        mail_message.html = render_template("email.html")
+        mail.send(mail_message)
+    except Exception as e:
+        print(e)
+        return {"message": "Some error happened"}, 500
+
+    return {"message": "Email has sent, please check your email to update password"}, 200
