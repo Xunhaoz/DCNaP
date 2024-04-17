@@ -3,6 +3,7 @@ import json
 
 
 
+
 def getFunding():
     # https://www.binance.com/fapi/v1/premiumIndex?symbol=BTCUSDT
     url = "https://www.binance.com/fapi/v1/premiumIndex"
@@ -29,9 +30,29 @@ def getFunding():
 
     result = {pair["symbol"]:eval(pair["lastFundingRate"])*100 for pair in parsed_response}
     sorted_result = dict(sorted(result.items(), key=lambda item: item[1], reverse=True))
-    print(sorted_result)
+    
+    spots = getSpot()
+    sorted_result_filtered = {key:value for key, value in sorted_result.items() if key in spots}
 
-    return sorted_result
+    # print(sorted_result_filtered)
+
+
+    return sorted_result_filtered
+
+
+def getSpot():
+    # "https://api.binance.com/api/v3/exchangeInfo"
+    
+    url = "https://api.binance.com/api/v3/exchangeInfo"
+    response = requests.get(url)
+
+    parsed_response = json.loads(response.text)
+
+    pairs = [pair["symbol"] for pair in parsed_response["symbols"]]
+
+    return pairs
+    
+
 
 def getSymbol():
     # https://www.binance.com/bapi/futures/v1/public/future/common/symbol-config-info
