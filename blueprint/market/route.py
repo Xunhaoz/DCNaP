@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template
 from models.database import Exchange, db
 
-import blueprint.market.service
+import blueprint.market.service as service
 
 market = Blueprint(
     "market",
@@ -14,22 +14,30 @@ market = Blueprint(
 
 @market.route("/")
 def marketOverview():
-    return render_template("/job-listing.html")
+
+    fundings = []
+
+    # for exchange in service.getExchanges():
+
+    exchange = "binance"
+    funding = service.Funding()
+    funding.addExchange(exchange)
+    funding.addPairs()
+
+    fundings.append(funding)
+
+    return render_template(
+        "/job-listing.html",
+        fundings=fundings,
+    )
 
 
-@market.route("/loadData", methods=["GET"])
-def loadService():
-    print("herererererer")
-    print(Exchange.query.all())
-
-    exchanges = Exchange.query.all()
-
-    for e in exchanges:
-
-    print("herererererer")
-
-    return render_template("/layout-navbar-overlap.html")
-
+# @market.route("/loadData/<exchange>", methods=["GET"])
+# def loadService(exchange):
+#     fundings = service.getFunding()
+#
+#
+#     return fundings["exchange"]
 
 
 @market.route("/dashboard")

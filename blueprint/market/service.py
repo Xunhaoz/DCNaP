@@ -1,29 +1,39 @@
-from models.database import User, db
+from models.database import Exchange
+import importlib
+
+class Funding:
+    def __init__(self):
+        self.exchange = ""
+        self.pairs = {}
 
 
-import blueprint.market.exchange.binance
-import blueprint.market.exchange.coinbase
+    def addExchange(self, exchange):
+        self.exchange = exchange
 
-
-
-def main():
-    binanceList = exchange.binance.getFunding()
-    coinbaseList = exchange.coinbase.getFunding()
-
-
-    result = {
-        "binance": binanceList,
-        "coinbase": coinbaseList,
-    }
-
-    print(result)
-    return result
+    def addPairs(self):
+        self.pairs = getPairs(self.exchange)
+        
 
 def getExchanges():
+    # exchanges = []
+    # for ex in Exchange.query.all():
+    #     exchanges.append(ex.as_dict()["name"])
+
+    exchanges = ["binance", "coinbase"]
+
+    return exchanges
+
+
+def getPairs(exchange):
+    exchanges = importlib.import_module(f"blueprint.market.exchange.{exchange}")
+    return exchanges.getFunding()
+
     
-    return 
-
-
-
 if __name__ == "__main__":
-    main()
+
+    for exchange in getExchanges():
+        funding = Funding()
+        funding.addExchange(exchange)
+        funding.addPairs()
+
+        print(funding.pairs)
