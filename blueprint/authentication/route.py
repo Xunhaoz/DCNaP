@@ -1,11 +1,13 @@
 import hashlib
+import uuid
+
 from models.database import User, db
 from models.email import mail
 from flask_mail import Message
 from flask import Blueprint, render_template, request, make_response, jsonify
 from flask_jwt_extended import create_access_token, get_jwt_identity, jwt_required, create_refresh_token, \
     set_access_cookies, set_refresh_cookies, unset_access_cookies, unset_refresh_cookies
-from config import Config
+from itsdangerous import URLSafeSerializer
 
 authentication = Blueprint(
     "authentication",
@@ -88,10 +90,28 @@ def send_password_user():
             sender='leo20020529@gmail.com',
             recipients=[request.form["email"]]
         )
-        mail_message.html = render_template("email.html")
+        s = URLSafeSerializer('password-reset')
+        mail_message.html = render_template(
+            "email.html",
+            token=s.dumps(user.email)
+        )
         mail.send(mail_message)
     except Exception as e:
         print(e)
         return {"message": "Some error happened"}, 500
 
     return {"message": "Email has sent, please check your email to update password"}, 200
+
+
+@authentication.route("/update-password/<token>")
+def update_password(token):
+    return render_template('update-password.html', token=token)
+
+
+@authentication.route("/update-password/<token>", methods=["PATCH"])
+def update_user_password(token):
+    s = URLSafeSerializer('password-reset')
+    email = s.loads(token)
+    User.query.filter_by(email=email).update({"password": hashlib.md5(request.form["password"].encode()).hexdigest()})
+    db.session.commit()
+    return {"message": "Password updated successfully"}
