@@ -2,8 +2,6 @@ import requests
 import json
 
 
-
-
 def getFunding():
     # https://www.binance.com/fapi/v1/premiumIndex?symbol=BTCUSDT
     url = "https://www.binance.com/fapi/v1/premiumIndex"
@@ -29,15 +27,13 @@ def getFunding():
     parsed_response = json.loads(response.text)
 
     result = {pair["symbol"]:eval(pair["lastFundingRate"])*100 for pair in parsed_response}
-    sorted_result = dict(sorted(result.items(), key=lambda item: item[1], reverse=True))
-    
+
     spots = getSpot()
-    sorted_result_filtered = {key:value for key, value in sorted_result.items() if key in spots}
+    result_filtered = {key:value for key, value in result.items() if key in spots}
 
-    # print(sorted_result_filtered)
+    # sorted_result = dict(sorted(result_filtered.items(), key=lambda item: item[1], reverse=True))
 
-
-    return sorted_result_filtered
+    return result_filtered
 
 
 def getSpot():

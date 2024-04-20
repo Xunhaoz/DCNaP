@@ -44,7 +44,7 @@ def create_user():
         if User.query.filter_by(email=request.form["email"]).first():
             return {"message": "User already exists"}, 400
 
-        password = hashlib.md5(request.form["password"].encode()).hexdigest()
+        password = hashlib.sha256(request.form["password"].encode()).hexdigest()
         user = User(name=request.form["name"], email=request.form["email"], password=password)
         db.session.add(user)
         db.session.commit()
@@ -56,7 +56,7 @@ def create_user():
 
 @authentication.route("/sign-in", methods=["POST"])
 def sign_in_user():
-    password = hashlib.md5(request.form["password"].encode()).hexdigest()
+    password = hashlib.sha256(request.form["password"].encode()).hexdigest()
     user = User.query.filter_by(email=request.form["email"], password=password).first()
     if user is None:
         return {"message": "Invalid credentials"}, 400
