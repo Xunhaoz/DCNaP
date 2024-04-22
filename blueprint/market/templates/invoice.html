@@ -12,7 +12,7 @@
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
     <meta http-equiv="X-UA-Compatible" content="ie=edge"/>
-    <title>Search for Goods</title>
+    <title>Invoice - Tabler - Premium and Open Source dashboard template with responsive and high quality UI.</title>
     <!-- CSS files -->
     <link href="{{ url_for('static', filename='css/tabler.min.css') }}" rel="stylesheet"/>
     <link href="{{ url_for('static', filename='css/tabler-flags.min.css') }}" rel="stylesheet"/>
@@ -32,7 +32,7 @@
     </style>
 </head>
 <body>
-<script src="{{ url_for('static', filename='js/demo-theme.min.js') }}"></script>
+<script src="./dist/js/demo-theme.min.js?1692870487"></script>
 <div class="page">
     <!-- Navbar -->
     <header class="navbar navbar-expand-md d-print-none">
@@ -514,7 +514,7 @@
                                         <a class="dropdown-item" href="./gallery.html">
                                             Gallery
                                         </a>
-                                        <a class="dropdown-item" href="./invoice.html">
+                                        <a class="dropdown-item active" href="./invoice.html">
                                             Invoice
                                         </a>
                                         <a class="dropdown-item" href="./search-results.html">
@@ -570,7 +570,7 @@
                                             Trial ended
                                             <span class="badge badge-sm bg-green-lt text-uppercase ms-auto">New</span>
                                         </a>
-                                        <a class="dropdown-item active" href="./job-listing.html">
+                                        <a class="dropdown-item" href="./job-listing.html">
                                             Job listing
                                             <span class="badge badge-sm bg-green-lt text-uppercase ms-auto">New</span>
                                         </a>
@@ -742,23 +742,8 @@
                 <div class="row g-2 align-items-center">
                     <div class="col">
                         <h2 class="page-title">
-                            Search for Goods
+                            Invoice
                         </h2>
-                    </div>
-                    <!-- Page title actions -->
-                    <div class="col-auto ms-auto d-print-none">
-                        <button type="button" class="btn btn-primary" onclick="window.location.href='{{ url_for('market.invoice') }}'">
-                            <!-- Download SVG icon from http://tabler-icons.io/i/printer -->
-                            <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24"
-                                 viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
-                                 stroke-linecap="round" stroke-linejoin="round">
-                                <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-                                <path d="M17 17h2a2 2 0 0 0 2 -2v-4a2 2 0 0 0 -2 -2h-14a2 2 0 0 0 -2 2v4a2 2 0 0 0 2 2h2"/>
-                                <path d="M17 9v-4a2 2 0 0 0 -2 -2h-6a2 2 0 0 0 -2 2v4"/>
-                                <path d="M7 13m0 2a2 2 0 0 1 2 -2h6a2 2 0 0 1 2 2v4a2 2 0 0 1 -2 2h-6a2 2 0 0 1 -2 -2z"/>
-                            </svg>
-                            Generate statement
-                        </button>
                     </div>
                 </div>
             </div>
@@ -766,240 +751,97 @@
         <!-- Page body -->
         <div class="page-body">
             <div class="container-xl">
-                <div class="row g-4">
-                    <div class="col-md-3">
-                        <form id="goodsForm" novalidate method="post" action="{{ url_for('market.market_overview') }}">
-                            <div class="form-label">Exchange</div>
-                            <div class="mb-4">
-                                <select class="form-select" name="exchange">
-                                    <option>all</option>
-                                    {% for exchange in funding['exchange'] %}
-                                        <option value="{{ exchange }}">{{ exchange }}</option>
-                                    {% endfor %}
-                                </select>
+                <div class="card card-lg">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-6">
+                                <p class="h3">Company</p>
+                                <address>
+                                    Street Address<br>
+                                    State, City<br>
+                                    Region, Postal Code<br>
+                                    ltd@example.com
+                                </address>
                             </div>
-
-                            <div class="form-label">Funding Time</div>
-                            {% for nextFundingTime in funding['nextFundingTime'] %}
-                                <div class="mb-4">
-                                    <label class="form-check">
-                                        <input type="checkbox" class="form-check-input" name="fundingTime"
-                                               value="{{ nextFundingTime }}" checked>
-                                        <span class="form-check-label">{{ nextFundingTime }}</span>
-                                    </label>
-                                </div>
-                            {% endfor %}
-
-                            <div class="form-label">Market Price</div>
-                            <div class="mb-4">
-                                <label class="form-check">
-                                    <input type="radio" class="form-check-input" name="form-market" value="1" checked>
-                                    <span class="form-check-label">total</span>
-                                </label>
-                                <label class="form-check">
-                                    <input type="radio" class="form-check-input" name="form-market" value="2">
-                                    <span class="form-check-label">1-std ~ 2-std</span>
-                                </label>
-                                <label class="form-check">
-                                    <input type="radio" class="form-check-input" name="form-market" value="3">
-                                    <span class="form-check-label">0-std ~ 1-std</span>
-                                </label>
-                                <label class="form-check">
-                                    <input type="radio" class="form-check-input" name="form-market" value="4">
-                                    <span class="form-check-label">-1-std ~ 0-std</span>
-                                </label>
-                                <label class="form-check">
-                                    <input type="radio" class="form-check-input" name="form-market" value="5">
-                                    <span class="form-check-label">-2-std ~ -1-std</span>
-                                </label>
+                            <div class="col-6 text-end">
+                                <p class="h3">Client</p>
+                                <address>
+                                    Street Address<br>
+                                    State, City<br>
+                                    Region, Postal Code<br>
+                                    ctr@example.com
+                                </address>
                             </div>
-
-                            <div class="form-label">Index Price</div>
-                            <div class="mb-4">
-                                <label class="form-check">
-                                    <input type="radio" class="form-check-input" name="form-index" value="1" checked>
-                                    <span class="form-check-label">total</span>
-                                </label>
-                                <label class="form-check">
-                                    <input type="radio" class="form-check-input" name="form-index" value="2">
-                                    <span class="form-check-label">1-std ~ 2-std</span>
-                                </label>
-                                <label class="form-check">
-                                    <input type="radio" class="form-check-input" name="form-index" value="3">
-                                    <span class="form-check-label">0-std ~ 1-std</span>
-                                </label>
-                                <label class="form-check">
-                                    <input type="radio" class="form-check-input" name="form-index" value="4">
-                                    <span class="form-check-label">-1-std ~ 0-std</span>
-                                </label>
-                                <label class="form-check">
-                                    <input type="radio" class="form-check-input" name="form-index" value="5">
-                                    <span class="form-check-label">-2-std ~ -1-std</span>
-                                </label>
-                            </div>
-
-                            <div class="form-label">Funding Rate</div>
-                            <div class="mb-4">
-                                <label class="form-check">
-                                    <input type="radio" class="form-check-input" name="form-funding" value="1" checked>
-                                    <span class="form-check-label">total</span>
-                                </label>
-                                <label class="form-check">
-                                    <input type="radio" class="form-check-input" name="form-funding" value="2">
-                                    <span class="form-check-label">1-std ~ 2-std</span>
-                                </label>
-                                <label class="form-check">
-                                    <input type="radio" class="form-check-input" name="form-funding" value="3">
-                                    <span class="form-check-label">0-std ~ 1-std</span>
-                                </label>
-                                <label class="form-check">
-                                    <input type="radio" class="form-check-input" name="form-funding" value="4">
-                                    <span class="form-check-label">-1-std ~ 0-std</span>
-                                </label>
-                                <label class="form-check">
-                                    <input type="radio" class="form-check-input" name="form-funding" value="5">
-                                    <span class="form-check-label">-2-std ~ -1-std</span>
-                                </label>
-                            </div>
-
-                            <div class="form-label">Interest Rate</div>
-                            <div class="mb-4">
-                                <label class="form-check">
-                                    <input type="radio" class="form-check-input" name="form-interest" value="1" checked>
-                                    <span class="form-check-label">total</span>
-                                </label>
-                                <label class="form-check">
-                                    <input type="radio" class="form-check-input" name="form-interest" value="2">
-                                    <span class="form-check-label">1-std ~ 2-std</span>
-                                </label>
-                                <label class="form-check">
-                                    <input type="radio" class="form-check-input" name="form-interest" value="3">
-                                    <span class="form-check-label">0-std ~ 1-std</span>
-                                </label>
-                                <label class="form-check">
-                                    <input type="radio" class="form-check-input" name="form-interest" value="4">
-                                    <span class="form-check-label">-1-std ~ 0-std</span>
-                                </label>
-                                <label class="form-check">
-                                    <input type="radio" class="form-check-input" name="form-interest" value="5">
-                                    <span class="form-check-label">-2-std ~ -1-std</span>
-                                </label>
-                            </div>
-
-                            <div class="mt-5">
-                                <button class="btn btn-primary w-100" type="submit">
-                                    Confirm changes
-                                </button>
-                                <a href="{{ url_for('market.market_overview') }}" class="btn btn-link w-100">
-                                    Reset to defaults
-                                </a>
-                            </div>
-                        </form>
-                    </div>
-
-                    <div class="col-md-9">
-                        <div class="row row-cards">
-                            <div id="card-container" class="space-y">
-                                {% for index, data in funding['data'].items() %}
-                                    <div class="card">
-                                        <div class="row g-0">
-                                            <div class="col-auto">
-                                                <div class="card-body">
-                                                    <div class="avatar avatar-md"
-                                                         style="background-image: url({{ url_for('static', filename=data['exchange'].lower() + '.png') }})"></div>
-                                                </div>
-                                            </div>
-                                            <div class="col">
-                                                <div class="card-body ps-0">
-                                                    <div class="row">
-                                                        <div class="col">
-                                                            <h3 class="mb-0"><a
-                                                                    href="#">{{ data['symbol'] }} {{ data['nextFundingTime'] }}</a>
-                                                            </h3>
-                                                        </div>
-                                                        {% if data['fundingRate'] < 0 %}
-                                                            <div class="col-auto fs-3 text-red">{{ data['fundingRate'] }}</div>
-                                                        {% else %}
-                                                            <div class="col-auto fs-3 text-green">{{ data['fundingRate'] }}</div>
-                                                        {% endif %}
-                                                    </div>
-                                                    <div class="row">
-                                                        <div class="col-md">
-                                                            <div class="mt-3 list-inline list-inline-dots mb-0 text-secondary d-sm-block d-none">
-                                                                <div class="list-inline-item">
-                                                                    <!-- Download SVG icon from http://tabler-icons.io/i/building-community -->
-                                                                    <svg xmlns="http://www.w3.org/2000/svg" width="24"
-                                                                         height="24" viewBox="0 0 24 24" fill="none"
-                                                                         stroke="currentColor" stroke-width="2"
-                                                                         stroke-linecap="round" stroke-linejoin="round"
-                                                                         class="icon icon-tabler icons-tabler-outline icon-tabler-building-store">
-                                                                        <path stroke="none" d="M0 0h24v24H0z"
-                                                                              fill="none"/>
-                                                                        <path d="M3 21l18 0"/>
-                                                                        <path d="M3 7v1a3 3 0 0 0 6 0v-1m0 1a3 3 0 0 0 6 0v-1m0 1a3 3 0 0 0 6 0v-1h-18l2 -4h14l2 4"/>
-                                                                        <path d="M5 21l0 -10.15"/>
-                                                                        <path d="M19 21l0 -10.15"/>
-                                                                        <path d="M9 21v-4a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v4"/>
-                                                                    </svg>
-                                                                    Market Price {{ data['markPrice'] }}
-                                                                </div>
-                                                                <div class="list-inline-item">
-                                                                    <!-- Download SVG icon from http://tabler-icons.io/i/license -->
-                                                                    <svg xmlns="http://www.w3.org/2000/svg" width="24"
-                                                                         height="24" viewBox="0 0 24 24" fill="none"
-                                                                         stroke="currentColor" stroke-width="2"
-                                                                         stroke-linecap="round" stroke-linejoin="round"
-                                                                         class="icon icon-tabler icons-tabler-outline icon-tabler-zoom-money">
-                                                                        <path stroke="none" d="M0 0h24v24H0z"
-                                                                              fill="none"/>
-                                                                        <path d="M10 10m-7 0a7 7 0 1 0 14 0a7 7 0 1 0 -14 0"/>
-                                                                        <path d="M21 21l-6 -6"/>
-                                                                        <path d="M12 7h-2.5a1.5 1.5 0 0 0 0 3h1a1.5 1.5 0 0 1 0 3h-2.5"/>
-                                                                        <path d="M10 13v1m0 -8v1"/>
-                                                                    </svg>
-                                                                    Index Price {{ data['indexPrice'] }}
-                                                                </div>
-                                                                <div class="list-inline-item">
-                                                                    <!-- Download SVG icon from http://tabler-icons.io/i/map-pin -->
-                                                                    <svg xmlns="http://www.w3.org/2000/svg" width="24"
-                                                                         height="24" viewBox="0 0 24 24" fill="none"
-                                                                         stroke="currentColor" stroke-width="2"
-                                                                         stroke-linecap="round" stroke-linejoin="round"
-                                                                         class="icon icon-tabler icons-tabler-outline icon-tabler-coins">
-                                                                        <path stroke="none" d="M0 0h24v24H0z"
-                                                                              fill="none"/>
-                                                                        <path d="M9 14c0 1.657 2.686 3 6 3s6 -1.343 6 -3s-2.686 -3 -6 -3s-6 1.343 -6 3z"/>
-                                                                        <path d="M9 14v4c0 1.656 2.686 3 6 3s6 -1.344 6 -3v-4"/>
-                                                                        <path d="M3 6c0 1.072 1.144 2.062 3 2.598s4.144 .536 6 0c1.856 -.536 3 -1.526 3 -2.598c0 -1.072 -1.144 -2.062 -3 -2.598s-4.144 -.536 -6 0c-1.856 .536 -3 1.526 -3 2.598z"/>
-                                                                        <path d="M3 6v10c0 .888 .772 1.45 2 2"/>
-                                                                        <path d="M3 11c0 .888 .772 1.45 2 2"/>
-                                                                    </svg>
-                                                                    Interest {{ data['interestRate'] }}
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-md-auto">
-                                                            <div class="mt-3 badges">
-                                                                <a href="https://{{ data['exchange'].lower() }}.com"
-                                                                   class="badge badge-outline text-secondary fw-normal badge-pill">{{ data['exchange'] }}</a>
-
-                                                                <a href="https://{{ data['exchange'].lower() }}.com"
-                                                                   class="badge badge-outline text-secondary fw-normal badge-pill">long
-                                                                    an unit</a>
-
-                                                                <a href="https://{{ data['exchange'].lower() }}.com"
-                                                                   class="badge badge-outline text-secondary fw-normal badge-pill">short
-                                                                    an unit</a>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                {% endfor %}
+                            <div class="col-12 my-5">
+                                <h1>Invoice INV/001/15</h1>
                             </div>
                         </div>
+                        <table class="table table-transparent table-responsive">
+                            <thead>
+                            <tr>
+                                <th class="text-center" style="width: 1%"></th>
+                                <th>Product</th>
+                                <th class="text-center" style="width: 1%">Qnt</th>
+                                <th class="text-end" style="width: 1%">Unit</th>
+                                <th class="text-end" style="width: 1%">Amount</th>
+                            </tr>
+                            </thead>
+                            <tr>
+                                <td class="text-center">1</td>
+                                <td>
+                                    <p class="strong mb-1">Logo Creation</p>
+                                    <div class="text-secondary">Logo and business cards design</div>
+                                </td>
+                                <td class="text-center">
+                                    1
+                                </td>
+                                <td class="text-end">$1.800,00</td>
+                                <td class="text-end">$1.800,00</td>
+                            </tr>
+                            <tr>
+                                <td class="text-center">2</td>
+                                <td>
+                                    <p class="strong mb-1">Online Store Design &amp; Development</p>
+                                    <div class="text-secondary">Design/Development for all popular modern browsers</div>
+                                </td>
+                                <td class="text-center">
+                                    1
+                                </td>
+                                <td class="text-end">$20.000,00</td>
+                                <td class="text-end">$20.000,00</td>
+                            </tr>
+                            <tr>
+                                <td class="text-center">3</td>
+                                <td>
+                                    <p class="strong mb-1">App Design</p>
+                                    <div class="text-secondary">Promotional mobile application</div>
+                                </td>
+                                <td class="text-center">
+                                    1
+                                </td>
+                                <td class="text-end">$3.200,00</td>
+                                <td class="text-end">$3.200,00</td>
+                            </tr>
+                            <tr>
+                                <td colspan="4" class="strong text-end">Subtotal</td>
+                                <td class="text-end">$25.000,00</td>
+                            </tr>
+                            <tr>
+                                <td colspan="4" class="strong text-end">Vat Rate</td>
+                                <td class="text-end">20%</td>
+                            </tr>
+                            <tr>
+                                <td colspan="4" class="strong text-end">Vat Due</td>
+                                <td class="text-end">$5.000,00</td>
+                            </tr>
+                            <tr>
+                                <td colspan="4" class="font-weight-bold text-uppercase text-end">Total Due</td>
+                                <td class="font-weight-bold text-end">$30.000,00</td>
+                            </tr>
+                        </table>
+                        <p class="text-secondary text-center mt-5">Thank you very much for doing business with us. We
+                            look forward to working with
+                            you again!</p>
                     </div>
                 </div>
             </div>
@@ -1050,128 +892,9 @@
         </footer>
     </div>
 </div>
-
-{% include 'alert.html' %}
 <!-- Libs JS -->
 <!-- Tabler Core -->
 <script src="{{ url_for('static', filename='js/tabler.min.js') }}" defer></script>
 <script src="{{ url_for('static', filename='js/demo.min.js') }}" defer></script>
-
-
-<script>
-    document.getElementById("goodsForm").addEventListener("submit", function (event) {
-        event.preventDefault();
-
-        let formData = new FormData(document.getElementById('goodsForm'));
-        const fetchOptions = {
-            method: 'POST',
-            body: formData
-        };
-
-        const cardContainer = document.getElementById('card-container');
-        cardContainer.innerHTML = '';
-
-        fetch("{{ url_for('market.market_overview_query') }}", fetchOptions)
-            .then(response => response.json())
-            .then(data => {
-                for (const [key, value] of Object.entries(data['data'])) {
-                    let fundingRateClass = value['fundingRate'] < 0 ? 'text-red' : 'text-green';
-                    let card = `
-                        <div class="card">
-                            <div class="row g-0">
-                                <div class="col-auto">
-                                    <div class="card-body">
-                                        <div class="avatar avatar-md"
-                                             style="background-image: url('/static/${value['exchange'].toLowerCase()}.png')"></div>
-                                    </div>
-                                </div>
-                                <div class="col">
-                                    <div class="card-body ps-0">
-                                        <div class="row">
-                                            <div class="col">
-                                                <h3 class="mb-0"><a
-                                                        href="#">${value['symbol']} ${value['nextFundingTime']}</a>
-                                                </h3>
-                                            </div>
-                                                <div class="col-auto fs-3 ${fundingRateClass}">${value['fundingRate']}</div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-md">
-                                                <div class="mt-3 list-inline list-inline-dots mb-0 text-secondary d-sm-block d-none">
-                                                    <div class="list-inline-item">
-                                                        <!-- Download SVG icon from http://tabler-icons.io/i/building-community -->
-                                                        <svg xmlns="http://www.w3.org/2000/svg" width="24"
-                                                             height="24" viewBox="0 0 24 24" fill="none"
-                                                             stroke="currentColor" stroke-width="2"
-                                                             stroke-linecap="round" stroke-linejoin="round"
-                                                             class="icon icon-tabler icons-tabler-outline icon-tabler-building-store">
-                                                            <path stroke="none" d="M0 0h24v24H0z"
-                                                                  fill="none"/>
-                                                            <path d="M3 21l18 0"/>
-                                                            <path d="M3 7v1a3 3 0 0 0 6 0v-1m0 1a3 3 0 0 0 6 0v-1m0 1a3 3 0 0 0 6 0v-1h-18l2 -4h14l2 4"/>
-                                                            <path d="M5 21l0 -10.15"/>
-                                                            <path d="M19 21l0 -10.15"/>
-                                                            <path d="M9 21v-4a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v4"/>
-                                                        </svg>
-                                                        Market Price ${value['markPrice']}
-                                                    </div>
-                                                    <div class="list-inline-item">
-                                                        <!-- Download SVG icon from http://tabler-icons.io/i/license -->
-                                                        <svg xmlns="http://www.w3.org/2000/svg" width="24"
-                                                             height="24" viewBox="0 0 24 24" fill="none"
-                                                             stroke="currentColor" stroke-width="2"
-                                                             stroke-linecap="round" stroke-linejoin="round"
-                                                             class="icon icon-tabler icons-tabler-outline icon-tabler-zoom-money">
-                                                            <path stroke="none" d="M0 0h24v24H0z"
-                                                                  fill="none"/>
-                                                            <path d="M10 10m-7 0a7 7 0 1 0 14 0a7 7 0 1 0 -14 0"/>
-                                                            <path d="M21 21l-6 -6"/>
-                                                            <path d="M12 7h-2.5a1.5 1.5 0 0 0 0 3h1a1.5 1.5 0 0 1 0 3h-2.5"/>
-                                                            <path d="M10 13v1m0 -8v1"/>
-                                                        </svg>
-                                                        Index Price ${value['indexPrice']}
-                                                    </div>
-                                                    <div class="list-inline-item">
-                                                        <!-- Download SVG icon from http://tabler-icons.io/i/map-pin -->
-                                                        <svg xmlns="http://www.w3.org/2000/svg" width="24"
-                                                             height="24" viewBox="0 0 24 24" fill="none"
-                                                             stroke="currentColor" stroke-width="2"
-                                                             stroke-linecap="round" stroke-linejoin="round"
-                                                             class="icon icon-tabler icons-tabler-outline icon-tabler-coins">
-                                                            <path stroke="none" d="M0 0h24v24H0z"
-                                                                  fill="none"/>
-                                                            <path d="M9 14c0 1.657 2.686 3 6 3s6 -1.343 6 -3s-2.686 -3 -6 -3s-6 1.343 -6 3z"/>
-                                                            <path d="M9 14v4c0 1.656 2.686 3 6 3s6 -1.344 6 -3v-4"/>
-                                                            <path d="M3 6c0 1.072 1.144 2.062 3 2.598s4.144 .536 6 0c1.856 -.536 3 -1.526 3 -2.598c0 -1.072 -1.144 -2.062 -3 -2.598s-4.144 -.536 -6 0c-1.856 .536 -3 1.526 -3 2.598z"/>
-                                                            <path d="M3 6v10c0 .888 .772 1.45 2 2"/>
-                                                            <path d="M3 11c0 .888 .772 1.45 2 2"/>
-                                                        </svg>
-                                                        Interest ${value['interestRate']}
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-auto">
-                                                <div class="mt-3 badges">
-                                                    <a href="https://${value['exchange']}.com"
-                                                       class="badge badge-outline text-secondary fw-normal badge-pill">${value['exchange']}</a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    `
-                    cardContainer.insertAdjacentHTML('afterend', card);
-                }
-                showMessage('successAlert', 'successAlertMsg', 'Data query successfully');
-            })
-            .catch(error => {
-                console.log(error);
-                showMessage('dangerAlert', 'dangerAlertMsg', error);
-            });
-
-    });
-</script>
 </body>
 </html>
