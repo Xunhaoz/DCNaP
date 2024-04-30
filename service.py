@@ -85,58 +85,66 @@ class IndexService:
 
     def get_currency_history(self):
         day = (datetime.now() - timedelta(days=2)).strftime('%Y-%m-%d')
-        json_data = {
+        spot_request_payload = {
             "bizType": "SPOT", "productName": "klines", "symbolRequestItems": [
                 {
-                    "endDay": day,
-                    "granularityList": ["1s"],
+                    "endDay": "2024-04-29",
+                    "granularityList": ["1m"],
                     "interval": "daily",
-                    "startDay": day,
-                    "symbol": "PENDLEUSDT"
-                },
-                {
-                    "endDay": day,
-                    "granularityList": ["1s"],
-                    "interval": "daily",
-                    "startDay": day,
-                    "symbol": "WLDUSDT"
-                },
-                {
-                    "endDay": day,
-                    "granularityList": ["1s"],
-                    "interval": "daily",
-                    "startDay": day,
-                    "symbol": "GALUSDT"
-                }]
+                    "startDay": "2024-04-29",
+                    "symbol": "ETHUSDT"
+                }
+            ]
         }
 
-        response = requests.post(
-            "https://www.binance.com/bapi/bigdata/v1/public/bigdata/finance/exchange/listDownloadData2", json=json_data
-        ).json()
-
-        download_items = {
-            download_item['filename']: download_item['url']
-            for download_item in response['data']['downloadItemList']
+        future_request_payload = {
+            "bizType": "FUTURES_UM", "productName": "klines", "symbolRequestItems": [
+                {
+                    "endDay": day,
+                    "granularityList": ["1m"],
+                    "interval": "daily",
+                    "startDay": day,
+                    "symbol": "ETHUSDT"
+                }
+            ]
         }
 
-        with ThreadPoolExecutor() as executor:
-            executor.map(self.get_history, download_items.keys(), download_items.values())
+        def get_history_data(payload):
+            download_item = requests.post(
+                "https://www.binance.com/bapi/bigdata/v1/public/bigdata/finance/exchange/listDownloadData2",
+                json=payload
+            ).json()['data']['downloadItemList'][0]
+            filename, url = download_item['filename'], download_item['url']
 
-        payload = {
-            filename: pd.read_csv(
-                f'./static/history/{filename}', header=None, names=[
+            header = 0
+            if payload['bizType'] == 'SPOT':
+                filename = 'SPOT_' + filename
+                header = None
+
+            self.download_history(filename, url)
+            data = pd.read_csv(
+                f'./static/history/{filename}', header=header, names=[
                     "open_time", "open", "high", "low", "close", "volume", "close_time", "quote_volume", "count",
                     "taker_buy_volume", "taker_buy_quote_volume", "ignore"
-                ])['close'].tolist()
-            for filename in download_items.keys()
-        }
-        print(download_items.keys())
+                ])
 
-        payload['datetime'] = pd.read_csv(
-            f'./static/history/{list(download_items.keys())[0]}', header=None, names=[
-                "open_time", "open", "high", "low", "close", "volume", "close_time", "quote_volume", "count",
-                "taker_buy_volume", "taker_buy_quote_volume", "ignore"
-            ])['open_time'].apply(lambda ts: datetime.fromtimestamp(ts / 1000).strftime('%Y-%m-%d %H:%M:%S')).tolist()
+            now = datetime.now()
+            minutes_of_day = now.hour * 60 + now.minute
+
+            return filename, \
+                data['close'].tolist()[minutes_of_day - 60:minutes_of_day], \
+                data['open_time'].apply(
+                    lambda ts: datetime.fromtimestamp(ts / 1000).strftime('%Y-%m-%d %H:%M:%S')
+                ).tolist()[minutes_of_day - 60:minutes_of_day]
+
+        spot_filename, spot_data, ts = get_history_data(spot_request_payload)
+        future_filename, future_data, ts = get_history_data(future_request_payload)
+
+        payload = {
+            spot_filename: spot_data,
+            future_filename: future_data,
+            'datetime': ts
+        }
         return payload
 
     def cache_image(self, img_url):
@@ -144,7 +152,7 @@ class IndexService:
         with open(f"./static/img/coin/{img_url.split('/')[-1]}", 'wb') as f:
             f.write(pic.content)
 
-    def get_history(self, filename, url):
+    def download_history(self, filename, url):
         resp = requests.get(url)
         with open(f"./static/history/{filename}", 'wb') as f:
             f.write(resp.content)

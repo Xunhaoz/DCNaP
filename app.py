@@ -25,16 +25,16 @@ with app.app_context():
     db.create_all()
 
 
-# @app.errorhandler(404)
-# def page_not_found(e):
-#     print(e)
-#     return render_template("error-404.html"), 404
-#
-#
-# @app.errorhandler(500)
-# def page_not_found(e):
-#     print(e)
-#     return render_template("error-500.html"), 500
+@app.errorhandler(404)
+def page_not_found(e):
+    print(e)
+    return render_template("error-404.html"), 404
+
+
+@app.errorhandler(500)
+def page_not_found(e):
+    print(e)
+    return render_template("error-500.html"), 500
 
 
 @jwt.unauthorized_loader

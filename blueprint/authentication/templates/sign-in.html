@@ -127,6 +127,7 @@
                 document.getElementById("email").value = "";
                 document.getElementById("password").value = "";
                 showMessage("successAlert", "successAlertMsg", data.message);
+                window.location.href = "{{ url_for('index') }}";
             })
             .catch(error => {
                 showMessage("dangerAlert", "dangerAlertMsg", String(error.message));
