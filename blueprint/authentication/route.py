@@ -112,6 +112,6 @@ def update_password(token):
 def update_user_password(token):
     s = URLSafeSerializer('password-reset')
     email = s.loads(token)
-    User.query.filter_by(email=email).update({"password": hashlib.md5(request.form["password"].encode()).hexdigest()})
+    User.query.filter_by(email=email).update({"password": hashlib.sha256(request.form["password"].encode()).hexdigest()})
     db.session.commit()
     return {"message": "Password updated successfully"}

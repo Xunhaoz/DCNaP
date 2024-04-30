@@ -755,21 +755,18 @@
                     <div class="card-body">
                         <div class="row">
                             <div class="col-6">
-                                <p class="h3">Company</p>
+                                <p class="h3">Never-Care-You Company</p>
                                 <address>
-                                    Street Address<br>
-                                    State, City<br>
-                                    Region, Postal Code<br>
-                                    ltd@example.com
+                                    No. 300, Jhongda Rd.<br>
+                                    Jhongli District<br>
+                                    Taoyuan City 32001<br>
+                                    Taiwan (R.O.C.)
                                 </address>
                             </div>
                             <div class="col-6 text-end">
-                                <p class="h3">Client</p>
+                                <p class="h3">{{ user['name'] }}<p>
                                 <address>
-                                    Street Address<br>
-                                    State, City<br>
-                                    Region, Postal Code<br>
-                                    ctr@example.com
+                                    {{ user['email'] }}
                                 </address>
                             </div>
                             <div class="col-12 my-5">
@@ -781,62 +778,50 @@
                             <tr>
                                 <th class="text-center" style="width: 1%"></th>
                                 <th>Product</th>
-                                <th class="text-center" style="width: 1%">Qnt</th>
-                                <th class="text-end" style="width: 1%">Unit</th>
-                                <th class="text-end" style="width: 1%">Amount</th>
+                                <th class="text-center" style="width: 1%">quantity</th>
+                                <th class="text-end" style="width: 1%">mark price</th>
+                                <th class="text-end" style="width: 1%">index price</th>
+                                <th class="text-end" style="width: 1%">interest rate</th>
+                                <th class="text-end" style="width: 1%">funding rate</th>
+                                <th class="text-center" style="width: 1%">direction</th>
+                                <th class="text-end" style="width: 1%">net sale</th>
+
+
                             </tr>
                             </thead>
+                            {% for key, good_user in goods_user['goods_user'].items() %}
+                                <tr>
+                                    <td class="text-center">{{ key }}</td>
+                                    <td>
+                                        <p class="strong mb-1">{{ good_user['symbol'] }}</p>
+                                        <div class="text-secondary">{{ good_user['date'] }}</div>
+                                    </td>
+                                    <td class="text-center">
+                                        {{ good_user['quantity'] }}
+                                    </td>
+                                    <td class="text-end">{{ good_user['mark_price'] }}</td>
+                                    <td class="text-end">{{ good_user['index_price'] }}</td>
+                                    <td class="text-end">{{ good_user['interest_rate'] }}</td>
+                                    <td class="text-end">{{ good_user['funding_rate'] }}</td>
+                                    <td class="text-center">{{ good_user['direction'] }}</td>
+                                    <td class="text-end">{{ good_user['net sale'] }}</td>
+                                </tr>
+                            {% endfor %}
                             <tr>
-                                <td class="text-center">1</td>
-                                <td>
-                                    <p class="strong mb-1">Logo Creation</p>
-                                    <div class="text-secondary">Logo and business cards design</div>
-                                </td>
-                                <td class="text-center">
-                                    1
-                                </td>
-                                <td class="text-end">$1.800,00</td>
-                                <td class="text-end">$1.800,00</td>
+                                <td colspan="8" class="strong text-end">Subtotal</td>
+                                <td class="text-end">${{ goods_user['sub_total'] }}</td>
                             </tr>
                             <tr>
-                                <td class="text-center">2</td>
-                                <td>
-                                    <p class="strong mb-1">Online Store Design &amp; Development</p>
-                                    <div class="text-secondary">Design/Development for all popular modern browsers</div>
-                                </td>
-                                <td class="text-center">
-                                    1
-                                </td>
-                                <td class="text-end">$20.000,00</td>
-                                <td class="text-end">$20.000,00</td>
+                                <td colspan="8" class="strong text-end">Vat Rate</td>
+                                <td class="text-end">{{ goods_user['vat_rate'] }}%</td>
                             </tr>
                             <tr>
-                                <td class="text-center">3</td>
-                                <td>
-                                    <p class="strong mb-1">App Design</p>
-                                    <div class="text-secondary">Promotional mobile application</div>
-                                </td>
-                                <td class="text-center">
-                                    1
-                                </td>
-                                <td class="text-end">$3.200,00</td>
-                                <td class="text-end">$3.200,00</td>
+                                <td colspan="8" class="strong text-end">Vat Due</td>
+                                <td class="text-end">${{ goods_user['vat_due'] }}</td>
                             </tr>
                             <tr>
-                                <td colspan="4" class="strong text-end">Subtotal</td>
-                                <td class="text-end">$25.000,00</td>
-                            </tr>
-                            <tr>
-                                <td colspan="4" class="strong text-end">Vat Rate</td>
-                                <td class="text-end">20%</td>
-                            </tr>
-                            <tr>
-                                <td colspan="4" class="strong text-end">Vat Due</td>
-                                <td class="text-end">$5.000,00</td>
-                            </tr>
-                            <tr>
-                                <td colspan="4" class="font-weight-bold text-uppercase text-end">Total Due</td>
-                                <td class="font-weight-bold text-end">$30.000,00</td>
+                                <td colspan="8" class="font-weight-bold text-uppercase text-end">Total Due</td>
+                                <td class="font-weight-bold text-end">${{ goods_user['total_due'] }}</td>
                             </tr>
                         </table>
                         <p class="text-secondary text-center mt-5">Thank you very much for doing business with us. We
@@ -846,50 +831,7 @@
                 </div>
             </div>
         </div>
-        <footer class="footer footer-transparent d-print-none">
-            <div class="container-xl">
-                <div class="row text-center align-items-center flex-row-reverse">
-                    <div class="col-lg-auto ms-lg-auto">
-                        <ul class="list-inline list-inline-dots mb-0">
-                            <li class="list-inline-item"><a href="https://tabler.io/docs" target="_blank"
-                                                            class="link-secondary" rel="noopener">Documentation</a></li>
-                            <li class="list-inline-item"><a href="./license.html" class="link-secondary">License</a>
-                            </li>
-                            <li class="list-inline-item"><a href="https://github.com/tabler/tabler" target="_blank"
-                                                            class="link-secondary" rel="noopener">Source code</a></li>
-                            <li class="list-inline-item">
-                                <a href="https://github.com/sponsors/codecalm" target="_blank" class="link-secondary"
-                                   rel="noopener">
-                                    <!-- Download SVG icon from http://tabler-icons.io/i/heart -->
-                                    <svg xmlns="http://www.w3.org/2000/svg"
-                                         class="icon text-pink icon-filled icon-inline" width="24" height="24"
-                                         viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
-                                         stroke-linecap="round" stroke-linejoin="round">
-                                        <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-                                        <path d="M19.5 12.572l-7.5 7.428l-7.5 -7.428a5 5 0 1 1 7.5 -6.566a5 5 0 1 1 7.5 6.572"/>
-                                    </svg>
-                                    Sponsor
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
-                    <div class="col-12 col-lg-auto mt-3 mt-lg-0">
-                        <ul class="list-inline list-inline-dots mb-0">
-                            <li class="list-inline-item">
-                                Copyright &copy; 2023
-                                <a href="." class="link-secondary">Tabler</a>.
-                                All rights reserved.
-                            </li>
-                            <li class="list-inline-item">
-                                <a href="./changelog.html" class="link-secondary" rel="noopener">
-                                    v1.0.0-beta20
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </footer>
+        {% include 'footer.html' %}
     </div>
 </div>
 <!-- Libs JS -->
