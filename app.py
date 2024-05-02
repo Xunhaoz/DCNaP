@@ -32,6 +32,7 @@ def page_not_found(e):
 
 
 @app.errorhandler(500)
+@app.errorhandler(Exception)
 def page_not_found(e):
     print(e)
     return render_template("error-500.html"), 500
@@ -51,6 +52,12 @@ def custom_expired_token_response(_err, _payload):
 def index():
     index_payload = IndexService().get_index()
     return render_template("index.html", index_payload=index_payload), 200
+
+
+@app.route('/custom_error')
+def custom_error():
+    print(0 / 0)
+    return "error", 500
 
 
 @app.after_request

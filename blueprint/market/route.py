@@ -64,3 +64,10 @@ def add_goods():
     db.session.add(good_user)
     db.session.commit()
     return jsonify({"message": "add goods successfully"})
+
+
+@market.route("/top-up")
+@jwt_required()
+def top_up():
+    goods_user = service.Funding().get_good_user(get_jwt_identity()["id"])
+    return render_template("/pricing.html", goods_user=goods_user, user=get_jwt_identity())
