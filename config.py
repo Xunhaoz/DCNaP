@@ -10,3 +10,5 @@ class Config:
     MAIL_PASSWORD = "mxyp vfsm wpnw ydsu"
     MAIL_USE_TLS = True
     MAIL_USE_SSL = False
+
+

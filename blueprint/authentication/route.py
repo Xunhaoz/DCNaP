@@ -4,9 +4,9 @@ import uuid
 from models.database import User, db
 from models.email import mail
 from flask_mail import Message
-from flask import Blueprint, render_template, request, make_response, jsonify
+from flask import Blueprint, redirect, url_for, render_template, request, make_response, jsonify
 from flask_jwt_extended import create_access_token, get_jwt_identity, jwt_required, create_refresh_token, \
-    set_access_cookies, set_refresh_cookies, unset_access_cookies, unset_refresh_cookies
+    set_access_cookies, set_refresh_cookies, unset_access_cookies, unset_refresh_cookies, unset_jwt_cookies
 from itsdangerous import URLSafeSerializer
 
 authentication = Blueprint(
@@ -73,8 +73,9 @@ def sign_in_user():
 @jwt_required()
 def sign_out_user():
     response = make_response(jsonify({"message": "User logged out successfully"}), 200)
-    unset_access_cookies(response)
-    unset_refresh_cookies(response)
+    unset_access_cookies(response, '192.168.0.104')
+    unset_refresh_cookies(response, '192.168.0.104')
+    response.set_cookie('test', '123456', expires=0)
     return response
 
 

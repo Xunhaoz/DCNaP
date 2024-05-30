@@ -80,6 +80,16 @@ class Funding:
     def get_good_user(self, user_id):
         goods_user = GoodUser.query.filter_by(user_id=user_id).all()
         payload = [good_user.as_dict() for good_user in goods_user]
+
+        if not payload:
+            return {
+                'sub_total': 0,
+                'vat_rate': 0,
+                'vat_due': 0,
+                'total_due': 0,
+                'goods_user': {}
+            }
+
         df = pd.DataFrame(payload).set_index('id')
         df['net sale'] = df.apply(lambda x: self.row_processor(x), axis=1)
         df.sort_index(inplace=True)
@@ -96,15 +106,36 @@ class Funding:
         grouped_df.reset_index(inplace=True)
         grouped_df['date'] = grouped_df['symbol'].apply(lambda x: ''.join(x.split()[1:]))
         grouped_df['symbol'] = grouped_df['symbol'].apply(lambda x: x.split()[0])
+        grouped_df['net sale'] = grouped_df['net sale'].apply(lambda x: round(x, 4))
         sub_total = grouped_df['net sale'].sum()
-        vat_rate = '20%'
+        vat_rate = '20'
         vat = sub_total * 0.2
         total_due = sub_total + vat
         payload = {
-            'sub_total': sub_total,
+            'sub_total': round(sub_total, 4),
             'vat_rate': vat_rate,
-            'vat_due': vat,
-            'total_due': total_due,
+            'vat_due': round(vat, 4),
+            'total_due': round(total_due, 4),
             'goods_user': grouped_df.to_dict(orient='index')
         }
         return payload
+
+
+class PriceCard:
+    PriceCard10 = 100
+    PriceCard49 = 20
+    PriceCard99 = 5
+    PriceCard139 = 1
+
+    @staticmethod
+    def get_price_card():
+        return {
+            'PriceCard10': PriceCard.PriceCard10,
+            'PriceCard49': PriceCard.PriceCard49,
+            'PriceCard99': PriceCard.PriceCard99,
+            'PriceCard139': PriceCard.PriceCard139
+        }
+
+    @staticmethod
+    def update_price_card(price_card: str):
+        setattr(PriceCard, price_card, getattr(PriceCard, price_card) - 1)

@@ -88,10 +88,10 @@ class IndexService:
         spot_request_payload = {
             "bizType": "SPOT", "productName": "klines", "symbolRequestItems": [
                 {
-                    "endDay": "2024-04-29",
+                    "endDay": day,
                     "granularityList": ["1m"],
                     "interval": "daily",
-                    "startDay": "2024-04-29",
+                    "startDay": day,
                     "symbol": "ETHUSDT"
                 }
             ]
@@ -141,8 +141,8 @@ class IndexService:
         future_filename, future_data, ts = get_history_data(future_request_payload)
 
         payload = {
-            spot_filename: spot_data,
-            future_filename: future_data,
+            'spot': spot_data,
+            'future': future_data,
             'datetime': ts
         }
         return payload

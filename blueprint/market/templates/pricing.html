@@ -33,7 +33,7 @@
     </style>
 </head>
 <body>
-<script src="./dist/js/demo-theme.min.js?1692870487"></script>
+<script src="{{ url_for('static', filename='js/demo-theme.min.js') }}"></script>
 <div class="page">
     <!-- Navbar -->
     {% include 'header.html' %}
@@ -57,10 +57,9 @@
                     <div class="col-sm-6 col-lg-3">
                         <div class="card card-md">
                             <div class="card-body text-center">
-                                <div class="text-uppercase text-secondary font-weight-medium">Free</div>
-                                <div class="display-5 fw-bold my-3">$0</div>
+                                <div class="text-uppercase text-secondary font-weight-medium">Basic</div>
+                                <div class="display-5 fw-bold my-3">$10</div>
                                 <ul class="list-unstyled lh-lg">
-                                    <li><strong>3</strong> Users</li>
                                     <li>
                                         <!-- Download SVG icon from http://tabler-icons.io/i/check -->
                                         <svg xmlns="http://www.w3.org/2000/svg" class="icon me-1 text-success"
@@ -70,7 +69,7 @@
                                             <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
                                             <path d="M5 12l5 5l10 -10"/>
                                         </svg>
-                                        Sharing Tools
+                                        Security and Transparency
                                     </li>
                                     <li>
                                         <!-- Download SVG icon from http://tabler-icons.io/i/x -->
@@ -81,7 +80,7 @@
                                             <path d="M18 6l-12 12"/>
                                             <path d="M6 6l12 12"/>
                                         </svg>
-                                        Design Tools
+                                        DeFi Ecosystem
                                     </li>
                                     <li>
                                         <!-- Download SVG icon from http://tabler-icons.io/i/x -->
@@ -92,7 +91,7 @@
                                             <path d="M18 6l-12 12"/>
                                             <path d="M6 6l12 12"/>
                                         </svg>
-                                        Private Messages
+                                        Smart Contracts
                                     </li>
                                     <li>
                                         <!-- Download SVG icon from http://tabler-icons.io/i/x -->
@@ -103,11 +102,14 @@
                                             <path d="M18 6l-12 12"/>
                                             <path d="M6 6l12 12"/>
                                         </svg>
-                                        Twitter API
+                                        Continuous Income
                                     </li>
                                 </ul>
                                 <div class="text-center mt-4">
-                                    <a href="#" class="btn w-100">Choose plan</a>
+                                    {% if  price_card['PriceCard10'] > 0 %}
+                                        <button class="btn w-100" onclick="deposit(10)">Choose plan Only
+                                            Leave {{ price_card['PriceCard10'] }}</button>
+                                    {% endif %}
                                 </div>
                             </div>
                         </div>
@@ -127,7 +129,6 @@
                                 <div class="text-uppercase text-secondary font-weight-medium">Premium</div>
                                 <div class="display-5 fw-bold my-3">$49</div>
                                 <ul class="list-unstyled lh-lg">
-                                    <li><strong>10</strong> Users</li>
                                     <li>
                                         <!-- Download SVG icon from http://tabler-icons.io/i/check -->
                                         <svg xmlns="http://www.w3.org/2000/svg" class="icon me-1 text-success"
@@ -137,7 +138,7 @@
                                             <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
                                             <path d="M5 12l5 5l10 -10"/>
                                         </svg>
-                                        Sharing Tools
+                                        Security and Transparency
                                     </li>
                                     <li>
                                         <!-- Download SVG icon from http://tabler-icons.io/i/check -->
@@ -148,7 +149,7 @@
                                             <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
                                             <path d="M5 12l5 5l10 -10"/>
                                         </svg>
-                                        Design Tools
+                                        DeFi Ecosystem
                                     </li>
                                     <li>
                                         <!-- Download SVG icon from http://tabler-icons.io/i/x -->
@@ -159,7 +160,7 @@
                                             <path d="M18 6l-12 12"/>
                                             <path d="M6 6l12 12"/>
                                         </svg>
-                                        Private Messages
+                                        Smart Contracts
                                     </li>
                                     <li>
                                         <!-- Download SVG icon from http://tabler-icons.io/i/x -->
@@ -170,11 +171,14 @@
                                             <path d="M18 6l-12 12"/>
                                             <path d="M6 6l12 12"/>
                                         </svg>
-                                        Twitter API
+                                        Continuous Income
                                     </li>
                                 </ul>
                                 <div class="text-center mt-4">
-                                    <a href="#" class="btn btn-green w-100">Choose plan</a>
+                                    {% if  price_card['PriceCard49'] > 0 %}
+                                        <button onclick="deposit(49)" class="btn btn-green w-100">Choose plan Only
+                                            Leave {{ price_card['PriceCard49'] }}</button>
+                                    {% endif %}
                                 </div>
                             </div>
                         </div>
@@ -185,7 +189,6 @@
                                 <div class="text-uppercase text-secondary font-weight-medium">Enterprise</div>
                                 <div class="display-5 fw-bold my-3">$99</div>
                                 <ul class="list-unstyled lh-lg">
-                                    <li><strong>100</strong> Users</li>
                                     <li>
                                         <!-- Download SVG icon from http://tabler-icons.io/i/check -->
                                         <svg xmlns="http://www.w3.org/2000/svg" class="icon me-1 text-success"
@@ -195,7 +198,7 @@
                                             <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
                                             <path d="M5 12l5 5l10 -10"/>
                                         </svg>
-                                        Sharing Tools
+                                        Security and Transparency
                                     </li>
                                     <li>
                                         <!-- Download SVG icon from http://tabler-icons.io/i/check -->
@@ -206,7 +209,7 @@
                                             <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
                                             <path d="M5 12l5 5l10 -10"/>
                                         </svg>
-                                        Design Tools
+                                        DeFi Ecosystem
                                     </li>
                                     <li>
                                         <!-- Download SVG icon from http://tabler-icons.io/i/check -->
@@ -217,7 +220,7 @@
                                             <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
                                             <path d="M5 12l5 5l10 -10"/>
                                         </svg>
-                                        Private Messages
+                                        Smart Contracts
                                     </li>
                                     <li>
                                         <!-- Download SVG icon from http://tabler-icons.io/i/x -->
@@ -228,11 +231,14 @@
                                             <path d="M18 6l-12 12"/>
                                             <path d="M6 6l12 12"/>
                                         </svg>
-                                        Twitter API
+                                        Continuous Income
                                     </li>
                                 </ul>
                                 <div class="text-center mt-4">
-                                    <a href="#" class="btn w-100">Choose plan</a>
+                                    {% if  price_card['PriceCard99'] > 0 %}
+                                        <button onclick="deposit(99)" class="btn w-100">Choose plan Only
+                                            Leave {{ price_card['PriceCard99'] }}</button>
+                                    {% endif %}
                                 </div>
                             </div>
                         </div>
@@ -243,7 +249,6 @@
                                 <div class="text-uppercase text-secondary font-weight-medium">Unlimited</div>
                                 <div class="display-5 fw-bold my-3">$139</div>
                                 <ul class="list-unstyled lh-lg">
-                                    <li><strong>Unlimited</strong> Users</li>
                                     <li>
                                         <!-- Download SVG icon from http://tabler-icons.io/i/check -->
                                         <svg xmlns="http://www.w3.org/2000/svg" class="icon me-1 text-success"
@@ -253,7 +258,7 @@
                                             <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
                                             <path d="M5 12l5 5l10 -10"/>
                                         </svg>
-                                        Sharing Tools
+                                        Security and Transparency
                                     </li>
                                     <li>
                                         <!-- Download SVG icon from http://tabler-icons.io/i/check -->
@@ -264,7 +269,7 @@
                                             <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
                                             <path d="M5 12l5 5l10 -10"/>
                                         </svg>
-                                        Design Tools
+                                        DeFi Ecosystem
                                     </li>
                                     <li>
                                         <!-- Download SVG icon from http://tabler-icons.io/i/check -->
@@ -275,7 +280,7 @@
                                             <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
                                             <path d="M5 12l5 5l10 -10"/>
                                         </svg>
-                                        Private Messages
+                                        Smart Contracts
                                     </li>
                                     <li>
                                         <!-- Download SVG icon from http://tabler-icons.io/i/check -->
@@ -286,11 +291,14 @@
                                             <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
                                             <path d="M5 12l5 5l10 -10"/>
                                         </svg>
-                                        Twitter API
+                                        Continuous Income
                                     </li>
                                 </ul>
                                 <div class="text-center mt-4">
-                                    <a href="#" class="btn w-100">Choose plan</a>
+                                    {% if  price_card['PriceCard139'] > 0 %}
+                                        <button onclick="deposit(139)" class="btn w-100">Choose plan Only
+                                            Leave {{ price_card['PriceCard139'] }}</button>
+                                    {% endif %}
                                 </div>
                             </div>
                         </div>
@@ -300,14 +308,16 @@
                             <div class="card-body">
                                 <div class="row align-items-center">
                                     <div class="col">
-                                        <h2 class="h3">Enterprise-ready. Reach out for a custom quote.</h2>
-                                        <p class="m-0 text-secondary">Tabler is designed to work great for large
-                                            enterprises. Take a look at our feature comparison.</p>
-                                    </div>
-                                    <div class="col-auto">
-                                        <a href="#" class="btn">
-                                            Book a demo
-                                        </a>
+                                        <h2 class="h3">Unlock Seamless Transactions with Our Crypto Arbitrage
+                                            Token!</h2>
+                                        <p class="m-0 text-secondary">🚀 Maximize Your Earnings with our cutting-edge
+                                            crypto arbitration system. Our platform ensures you get the best trade
+                                            deals, leveraging price differences across markets to boost your profits
+                                            effortlessly.</p>
+                                        <br>
+                                        <p class="m-0 text-secondary">💰 Platform-Exclusive Token: Our unique token is
+                                            your gateway to unbeatable discounts and exclusive deals on our platform.
+                                            Use it to buy and sell goods with unmatched efficiency and security.</p>
                                     </div>
                                 </div>
                             </div>
@@ -323,5 +333,42 @@
 <!-- Tabler Core -->
 <script src="{{ url_for('static', filename='js/tabler.min.js') }}" defer></script>
 <script src="{{ url_for('static', filename='js/demo.min.js') }}" defer></script>
+
+{% include 'alert.html' %}
+
+<script>
+
+
+    function getCookie(name) {
+        const value = `; ${document.cookie}`;
+        const parts = value.split(`; ${name}=`);
+        if (parts.length === 2) return parts.pop().split(';').shift();
+    }
+
+    function deposit(amount) {
+
+        const deposit = {
+            method: 'POST',
+            body: JSON.stringify({amount: amount}),
+            credentials: "same-origin",
+            headers: {
+                'Content-Type': 'application/json',
+                "X-CSRF-TOKEN": getCookie("csrf_access_token"),
+            },
+        };
+
+        fetch("{{ url_for('market.deposit_money') }}", deposit)
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+                showMessage('successAlert', 'successAlertMsg', data['message']);
+                window.location.href = "{{ url_for('market.top_up') }}";
+            })
+            .catch(error => {
+                console.log(error);
+                showMessage('dangerAlert', 'dangerAlertMsg', error['message']);
+            });
+    }
+</script>
 </body>
 </html>

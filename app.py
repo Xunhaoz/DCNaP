@@ -2,10 +2,11 @@
 from blueprint.authentication.route import authentication
 from blueprint.market.route import market
 from service import IndexService
-from models.database import db
+from models.database import db, User
 from config import Config
-from flask import Flask, render_template, redirect, url_for
-from flask_jwt_extended import JWTManager, get_jwt, create_access_token, set_access_cookies, get_jwt_identity
+from flask import Flask, render_template, redirect, url_for, request
+from flask_jwt_extended import JWTManager, get_jwt, create_access_token, set_access_cookies, get_jwt_identity, \
+    jwt_required
 from datetime import datetime, timedelta, timezone
 from models.email import mail
 
@@ -62,6 +63,8 @@ def custom_error():
 
 @app.after_request
 def refresh_expiring_jwts(response):
+    if request.path == '/authentication/sign-out':
+        return response
     try:
         exp_timestamp = get_jwt()["exp"]
         now = datetime.now(timezone.utc)
@@ -72,6 +75,13 @@ def refresh_expiring_jwts(response):
         return response
     except (RuntimeError, KeyError):
         return response
+
+
+@app.route('/user_info')
+@jwt_required()
+def user_info():
+    user = User.query.filter_by(id=get_jwt_identity()["id"]).first()
+    return {"user": user.as_dict()}
 
 
 if __name__ == '__main__':

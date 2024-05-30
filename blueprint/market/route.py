@@ -1,5 +1,5 @@
 import pandas as pd
-from flask import Blueprint, render_template, request, jsonify
+from flask import Blueprint, render_template, request, jsonify, redirect, url_for
 from models.database import db, User, GoodUser
 import blueprint.market.service as service
 from flask_jwt_extended import jwt_required, get_jwt_identity
@@ -16,6 +16,9 @@ market = Blueprint(
 @market.route("/", methods=["GET"])
 @jwt_required()
 def market_overview():
+    if not User.query.filter_by(id=get_jwt_identity()["id"]).first():
+        return redirect(url_for('sign-in'))
+
     funding = service.Funding().query()
     return render_template(
         "job-listing.html",
@@ -25,6 +28,9 @@ def market_overview():
 
 @market.route("/", methods=["POST"])
 def market_overview_query():
+    if not User.query.filter_by(id=get_jwt_identity()["id"]).first():
+        return redirect(url_for('authentication.sign_in'))
+
     payload = dict(request.form.lists())
 
     exchange = payload["exchange"][0]
@@ -44,6 +50,9 @@ def market_overview_query():
 @market.route("/invoice")
 @jwt_required()
 def invoice():
+    if not User.query.filter_by(id=get_jwt_identity()["id"]).first():
+        return redirect(url_for('authentication.sign_in'))
+
     goods_user = service.Funding().get_good_user(get_jwt_identity()["id"])
     return render_template("/invoice.html", goods_user=goods_user, user=get_jwt_identity())
 
@@ -51,6 +60,9 @@ def invoice():
 @market.route("/add_goods", methods=["POST"])
 @jwt_required()
 def add_goods():
+    if not User.query.filter_by(id=get_jwt_identity()["id"]).first():
+        return redirect(url_for('authentication.sign_in'))
+
     payload = request.json
     good_user = GoodUser(
         user_id=get_jwt_identity()["id"],
@@ -66,8 +78,26 @@ def add_goods():
     return jsonify({"message": "add goods successfully"})
 
 
+@market.route("/deposit", methods=["POST"])
+@jwt_required()
+def deposit_money():
+    if not User.query.filter_by(id=get_jwt_identity()["id"]).first():
+        return redirect(url_for('authentication.sign_in'))
+
+    payload = request.json
+    user = User.query.filter_by(id=get_jwt_identity()["id"]).first()
+    service.PriceCard().update_price_card(f'PriceCard{payload["amount"]}')
+    user.deposit = user.deposit + float(payload["amount"])
+    db.session.commit()
+    return jsonify({"message": "add deposit successfully"})
+
+
 @market.route("/top-up")
 @jwt_required()
 def top_up():
+    if not User.query.filter_by(id=get_jwt_identity()["id"]).first():
+        return redirect(url_for('authentication.sign_in'))
+
     goods_user = service.Funding().get_good_user(get_jwt_identity()["id"])
-    return render_template("/pricing.html", goods_user=goods_user, user=get_jwt_identity())
+    price_card = service.PriceCard().get_price_card()
+    return render_template("/pricing.html", goods_user=goods_user, user=get_jwt_identity(), price_card=price_card)

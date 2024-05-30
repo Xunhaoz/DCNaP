@@ -9,6 +9,7 @@ class User(db.Model):
     name = db.Column(db.String(80), nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
     password = db.Column(db.String(80))
+    deposit = db.Column(db.Float, default=0)
 
     good_user = db.relationship('GoodUser', backref='user', lazy=True)
 
@@ -32,3 +33,5 @@ class GoodUser(db.Model):
 
     def as_dict(self):
         return {c.name: str(getattr(self, c.name)) for c in self.__table__.columns}
+
+
