@@ -73,9 +73,8 @@ def sign_in_user():
 @jwt_required()
 def sign_out_user():
     response = make_response(jsonify({"message": "User logged out successfully"}), 200)
-    unset_access_cookies(response, '192.168.0.104')
-    unset_refresh_cookies(response, '192.168.0.104')
-    response.set_cookie('test', '123456', expires=0)
+    unset_access_cookies(response )
+    unset_refresh_cookies(response)
     return response
 
 
