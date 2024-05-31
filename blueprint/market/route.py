@@ -17,7 +17,7 @@ market = Blueprint(
 @jwt_required()
 def market_overview():
     if not User.query.filter_by(id=get_jwt_identity()["id"]).first():
-        return redirect(url_for('sign-in'))
+        return redirect(url_for('authentication.sign_in'))
 
     funding = service.Funding().query()
     return render_template(
@@ -27,10 +27,12 @@ def market_overview():
 
 
 @market.route("/", methods=["POST"])
+@jwt_required()
 def market_overview_query():
     if not User.query.filter_by(id=get_jwt_identity()["id"]).first():
         return redirect(url_for('authentication.sign_in'))
 
+    print(request.form)
     payload = dict(request.form.lists())
 
     exchange = payload["exchange"][0]

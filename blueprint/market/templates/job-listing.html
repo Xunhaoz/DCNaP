@@ -317,6 +317,7 @@
 <script src="{{ url_for('static', filename='js/demo.min.js') }}" defer></script>
 
 <script>
+
     function getCookie(name) {
         const value = `; ${document.cookie}`;
         const parts = value.split(`; ${name}=`);
@@ -362,9 +363,14 @@
         event.preventDefault();
 
         let formData = new FormData(document.getElementById('goodsForm'));
+
         const fetchOptions = {
             method: 'POST',
-            body: formData
+            body: formData,
+            credentials: "same-origin",
+            headers: {
+                "X-CSRF-TOKEN": getCookie("csrf_access_token"),
+            },
         };
 
         const cardContainer = document.getElementById('card-container');
